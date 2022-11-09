@@ -17,11 +17,14 @@ export class InfoPaginaService {
 
   ) {
 
-    http.get<Info>('assets/data/data-pagina.json')
+    this.http.get<Info>('assets/data/data-pagina.json')
     .subscribe( resp => {
 
       this.cargada = true;
       this.info = resp;
+
+      console.log(resp);
+
 
     });
 

@@ -9,5 +9,6 @@ export interface Info {
   facebook:       string;
   instagram:      string;
   tublr:          string;
+  pinterest:      string;
   equipo_trabajo: any[];
 }
