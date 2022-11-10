@@ -1,33 +1,45 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Info } from '../interfaces/data-pagina.interface';
+import { HttpClient } from '@angular/common/http';
+import { InfoPagina } from '../interfaces/info-pagina.interface';
+import { Trabajador } from '../interfaces/equipo.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InfoPaginaService {
 
-  info!: Info;
+  info: InfoPagina = {};
+  cargada = false;
 
-  cargada: boolean = false;
+  equipo: any[] = [];
 
-  constructor(
+  constructor( private http: HttpClient ) {
 
-    private http: HttpClient
+    this.cargarInfo();
+    this.cargarEquipo();
 
-  ) {
+  }
 
-    this.http.get<Info>('assets/data/data-pagina.json')
-    .subscribe( resp => {
+  private cargarInfo() {
 
+    this.http.get('assets/data/data-pagina.json')
+    .subscribe( (resp: InfoPagina) => {
       this.cargada = true;
       this.info = resp;
+    });
+  }
 
-      console.log(resp);
 
+  private cargarEquipo() {
 
+    this.http.get<Trabajador[]>('https://angular-html-5d13d-default-rtdb.europe-west1.firebasedatabase.app/equipo.json')
+    .subscribe( (resp: any[]) => {
+      this.equipo = resp;
     });
 
   }
 
 }
+
+
+
