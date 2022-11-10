@@ -67,13 +67,23 @@ export class ProductosService {
 
   private filtrarProductos(term: string) {
 
-    this.productosFiltrado = this.productos.filter(prod => {
+    this.productosFiltrado = [];
 
-      return prod.titulo.includes(term);
+    term = term.toLowerCase();
+
+    this.productos.forEach(prod => {
+
+      const tituloLower = prod.titulo.toLowerCase();
+
+      const categoriaLower = prod.categoria.toLowerCase();
+
+      if (categoriaLower.indexOf( term ) >= 0 || tituloLower.indexOf( term ) >= 0) {
+
+        this.productosFiltrado.push( prod );
+
+      }
 
     })
-
-    console.log(this.productosFiltrado);
 
   }
 
