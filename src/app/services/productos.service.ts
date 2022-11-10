@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Producto } from '../interfaces/producto.interface';
+import { ProductoInt } from '../interfaces/producto-int.inbterface';
 
 
 @Injectable({
@@ -27,6 +28,11 @@ export class ProductosService {
           this.cargando = false;
         });
 
+  }
+
+  getProducto( id: string ) {
+
+    return this.http.get<ProductoInt>(`https://angular-html-5d13d-default-rtdb.europe-west1.firebasedatabase.app/productos/${ id }.json`)
 
   }
 
