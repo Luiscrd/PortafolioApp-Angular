@@ -11,9 +11,10 @@ export class ProductosService {
 
   cargando = true;
   productos: Producto[] = [];
+  productosFiltrado: Producto[] = [];
 
 
-  constructor( private http: HttpClient ) {
+  constructor(private http: HttpClient) {
 
     this.cargarProductos();
 
@@ -22,17 +23,57 @@ export class ProductosService {
 
   private cargarProductos() {
 
-    this.http.get<Producto[]>('https://angular-html-5d13d-default-rtdb.europe-west1.firebasedatabase.app/productos_idx.json')
-        .subscribe( (resp: Producto[]) => {
+    return new Promise<void>((resolve, reject) => {
+
+      this.http.get<Producto[]>('https://angular-html-5d13d-default-rtdb.europe-west1.firebasedatabase.app/productos_idx.json')
+        .subscribe((resp: Producto[]) => {
+
           this.productos = resp;
+
           this.cargando = false;
+
+          resolve();
+
         });
+
+    })
+
 
   }
 
-  getProducto( id: string ) {
+  getProducto(id: string) {
 
-    return this.http.get<ProductoInt>(`https://angular-html-5d13d-default-rtdb.europe-west1.firebasedatabase.app/productos/${ id }.json`)
+    return this.http.get<ProductoInt>(`https://angular-html-5d13d-default-rtdb.europe-west1.firebasedatabase.app/productos/${id}.json`)
+
+  }
+
+  buscarProducto(term: string) {
+
+    if (this.productos.length === 0) {
+
+      this.cargarProductos().then(() => {
+
+        this.filtrarProductos(term);
+
+      })
+
+    } else {
+
+      this.filtrarProductos(term);
+
+    }
+
+  }
+
+  private filtrarProductos(term: string) {
+
+    this.productosFiltrado = this.productos.filter(prod => {
+
+      return prod.titulo.includes(term);
+
+    })
+
+    console.log(this.productosFiltrado);
 
   }
 
